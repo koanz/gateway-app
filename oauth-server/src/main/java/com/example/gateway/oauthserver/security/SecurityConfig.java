@@ -18,7 +18,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -71,6 +70,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 // Form login handles the redirect to the login page from the
                 // authorization server filter chain
+                .csrf(csrf -> csrf.disable())
                 .formLogin(Customizer.withDefaults());
 
         return http.build();
@@ -101,7 +101,7 @@ public class SecurityConfig {
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .redirectUri("http://127.0.0.1:8090/login/oauth2/code/gateway-app")
+                .redirectUri("http://127.0.0.1:8090/login/oauth2/code/client-app")
                 .redirectUri("http://127.0.0.1:8090/login/oauth2/code/authorized")
                 .postLogoutRedirectUri("http://127.0.0.1:8090/logout")
                 .scope(OidcScopes.OPENID)
