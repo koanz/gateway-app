@@ -40,4 +40,5 @@ public class UserMapper {
     public List<UserResponseDto> toDtoList(List<User> users) {
         return users.stream().map(this::entityToResponseDto).collect(Collectors.toList());
     }
+
 }

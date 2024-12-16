@@ -1,24 +1,15 @@
 package com.example.gateway.user.controllers;
 
-import com.example.gateway.commons.constants.UserRole;
 import com.example.gateway.commons.dtos.requests.UserRequestDto;
 import com.example.gateway.commons.dtos.requests.UserUpdateDto;
-import com.example.gateway.commons.dtos.responses.UserResponseDto;
-import com.example.gateway.commons.entities.Client;
-import com.example.gateway.commons.entities.Role;
 import com.example.gateway.commons.entities.User;
-import com.example.gateway.commons.mappers.UserMapper;
 import com.example.gateway.commons.models.PaginationRequest;
-import com.example.gateway.user.exceptions.EntityNotFoundException;
 import com.example.gateway.user.services.IUserService;
-import com.example.gateway.user.services.IUserServiceCb;
 import com.example.gateway.user.services.IUserRoleService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
@@ -29,26 +20,26 @@ import java.util.*;
 @RefreshScope
 @RestController
 @Slf4j
-@RequestMapping("/v1")
+@RequestMapping("/v1/user")
 public class UserRestController {
     @Autowired
     private IUserService service;
 
-    private final IUserServiceCb serviceCb;
+    //private final IUserServiceCb serviceCb;
 
     @Autowired
     private IUserRoleService userRoleService;
 
-    private final CircuitBreakerFactory cBreakerFactory;
+    //private final CircuitBreakerFactory cBreakerFactory;
 
     @Autowired
     private Environment env;
 
-    public UserRestController(@Qualifier("userServiceWebClient") IUserServiceCb serviceCb,
+    /*public UserRestController(@Qualifier("userServiceWebClient") IUserServiceCb serviceCb,
                               CircuitBreakerFactory cBreakerFactory) {
         this.cBreakerFactory = cBreakerFactory;
         this.serviceCb = serviceCb;
-    }
+    }*/
 
     @GetMapping("/fetch-config")
     public ResponseEntity<?> fetchConfig(@Value("${server.port}") String port) {
@@ -96,7 +87,13 @@ public class UserRestController {
         return ResponseEntity.ok(service.update(id, request));
     }
 
-    @GetMapping("/find-cb/{id}")
+    @GetMapping("/username/{username}")
+    @ResponseBody
+    public ResponseEntity<User> findByUsername(@PathVariable String username) {
+        return ResponseEntity.ok(service.findByUsername(username));
+    }
+
+    /*@GetMapping("/find-cb/{id}")
     @ResponseBody
     public ResponseEntity<?> getByIdCb(@PathVariable Long id) {
         UserMapper mapper = new UserMapper();
@@ -124,6 +121,6 @@ public class UserRestController {
         }
 
         return ResponseEntity.ok(response);
-    }
+    }*/
 
 }

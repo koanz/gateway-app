@@ -11,6 +11,7 @@ import com.example.gateway.commons.entities.User;
 import com.example.gateway.commons.mappers.ClientMapper;
 import com.example.gateway.commons.mappers.UserMapper;
 import com.example.gateway.commons.models.PaginationRequest;
+import com.example.gateway.user.exceptions.CustomException;
 import com.example.gateway.user.exceptions.EntityNotFoundException;
 import com.example.gateway.user.repositories.IClientRepository;
 import com.example.gateway.user.repositories.IUserRepository;
@@ -96,6 +97,21 @@ public class UserServiceImpl implements IUserService {
         }
 
         return mapper.entityToResponseDto(user.get());
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        if(username == null) {
+            throw new CustomException("Username is required.");
+        }
+
+        User user = repository.findByUsername(username.toUpperCase());
+
+        if(user == null) {
+            throw new EntityNotFoundException("Username not found with Username: " + username);
+        }
+
+        return user;
     }
 
     @Override
