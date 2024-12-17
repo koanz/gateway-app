@@ -49,6 +49,12 @@ spring:
             - Path=/api/security/**
           filters:
             - StripPrefix=2
+        - id: msvc-cliente
+          uri: lb://msvc-cliente
+          predicates:
+            - Path=/api/clients/**
+          filters:
+            - StripPrefix=2
         - id: msvc-user
           uri: lb://msvc-user
           predicates:

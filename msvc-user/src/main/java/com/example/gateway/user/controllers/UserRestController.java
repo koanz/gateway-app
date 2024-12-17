@@ -23,6 +23,7 @@ import java.util.*;
 @RequestMapping("/v1/user")
 public class UserRestController {
     private final Logger logger = LoggerFactory.getLogger(UserRestController.class);
+
     private IUserService service;
 
     //private final IUserServiceCb serviceCb;

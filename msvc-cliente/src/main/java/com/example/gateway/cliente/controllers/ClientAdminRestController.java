@@ -39,19 +39,20 @@ public class ClientAdminRestController {
 
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody @Validated ClientRequestDto request) {
-        logger.info("Create Client: {}", request);
+        logger.info("ClienteAdminRestController.create: {}", request);
         return ResponseEntity.ok(service.create(request));
     }
 
     @GetMapping("/find/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        logger.info("Find Client: {}", id);
+        logger.info("ClienteAdminRestControlller.find: {}", id);
         return ResponseEntity.ok(service.findById(id));
     }
 
     @GetMapping("/find-all")
     public ResponseEntity<?> findAll(PaginationRequest pageRequest, @RequestParam(name = "name", required = false) String name) {
-        logger.info("Find All Client. Request Parameter: {}", name);
+        logger.info("ClienteAdminRestController.findAll()");
+        logger.info("Request Parameter: {}", name);
         return ResponseEntity.ok(service.findAll(pageRequest));
     }
 

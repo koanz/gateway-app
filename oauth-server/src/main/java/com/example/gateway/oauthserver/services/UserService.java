@@ -1,6 +1,8 @@
 package com.example.gateway.oauthserver.services;
 
 import com.example.gateway.oauthserver.models.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,11 +22,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
     @Autowired
     private WebClient.Builder client;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        logger.info("Ejecutando proceso de login UserService.loadUserByUsername con {}", username);
         Map<String, String> params = new HashMap<>();
         params.put("username", username);
 
@@ -39,14 +43,17 @@ public class UserService implements UserDetailsService {
                     .stream()
                     .map(role -> new SimpleGrantedAuthority(role.getName()))
                     .collect(Collectors.toList());
+
+            logger.info("Se ha realizado con éxito el login por username: {}", user);
+
             return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                     user.getEnabled(), true, true, true, roles);
         } catch (WebClientResponseException e) {
             String errorDetails = e.getResponseBodyAsString();
-            System.err.println("Error fetching user: " + errorDetails);
+            logger.error("User Not Found with username: " + username + ". Error details: " + errorDetails);
             throw new UsernameNotFoundException("User Not Found with username: " + username + ". Error details: " + errorDetails, e);
         } catch (WebClientRequestException e) {
-            System.err.println("Request error: " + e.getMessage());
+            logger.error("Request error while fetching user: " + username);
             throw new UsernameNotFoundException("Request error while fetching user: " + username, e);
         }
     }
