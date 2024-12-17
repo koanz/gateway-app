@@ -7,7 +7,8 @@ import com.example.gateway.commons.models.PaginationRequest;
 import com.example.gateway.user.services.IUserService;
 import com.example.gateway.user.services.IUserRoleService;
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -19,10 +20,9 @@ import java.util.*;
 
 @RefreshScope
 @RestController
-@Slf4j
 @RequestMapping("/v1/user")
 public class UserRestController {
-    @Autowired
+    private final Logger logger = LoggerFactory.getLogger(UserRestController.class);
     private IUserService service;
 
     //private final IUserServiceCb serviceCb;
@@ -35,20 +35,22 @@ public class UserRestController {
     @Autowired
     private Environment env;
 
-    /*public UserRestController(@Qualifier("userServiceWebClient") IUserServiceCb serviceCb,
-                              CircuitBreakerFactory cBreakerFactory) {
-        this.cBreakerFactory = cBreakerFactory;
-        this.serviceCb = serviceCb;
-    }*/
+    public UserRestController(/*@Qualifier("userServiceWebClient") IUserServiceCb serviceCb,
+                              CircuitBreakerFactory cBreakerFactory,*/ IUserService service) {
+        //this.cBreakerFactory = cBreakerFactory;
+        //this.serviceCb = serviceCb;
+        this.service = service;
+    }
 
     @GetMapping("/fetch-config")
     public ResponseEntity<?> fetchConfig(@Value("${server.port}") String port) {
         Map<String, String> config = new HashMap<>();
 
         config.put("port", port);
+        logger.info(port);
 
         if(env.getActiveProfiles().length > 0 && env.getActiveProfiles()[0].equals("dev")) {
-            log.info(env.getProperty("configuracion.texto"));
+            logger.info(env.getProperty("configuracion.texto"));
             config.put("env", env.getProperty("configuracion.texto"));
 
             if(env.containsProperty("configuracion.autor.name")) {
@@ -66,12 +68,14 @@ public class UserRestController {
     @PostMapping("/create")
     @ResponseBody
     public ResponseEntity<?> create(@RequestBody UserRequestDto request) {
+        logger.info("Create User: {}", request);
         return ResponseEntity.ok(service.create(request));
     }
 
     @GetMapping("/find/{id}")
     @ResponseBody
     public ResponseEntity<?> getById(@PathVariable Long id) {
+        logger.info("UserRestController.find: {}", id);
         return ResponseEntity.ok(service.findById(id));
     }
 
@@ -84,12 +88,15 @@ public class UserRestController {
     @PutMapping("/update/{id}")
     @ResponseBody
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody @Valid UserUpdateDto request) {
+        logger.info("UserRestController.update: {}", id);
+        logger.info("update User: {}", request);
         return ResponseEntity.ok(service.update(id, request));
     }
 
     @GetMapping("/username/{username}")
     @ResponseBody
     public ResponseEntity<User> findByUsername(@PathVariable String username) {
+        logger.info("UserRestController.username: {}", username);
         return ResponseEntity.ok(service.findByUsername(username));
     }
 
