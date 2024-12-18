@@ -1,4 +1,4 @@
-package com.example.gateway.item.services;
+package com.example.gateway.item.services.impl;
 
 import com.example.gateway.commons.dtos.*;
 import com.example.gateway.commons.dtos.requests.ItemRequestDto;
@@ -8,8 +8,13 @@ import com.example.gateway.commons.entities.Product;
 import com.example.gateway.commons.mappers.ItemMapper;
 import com.example.gateway.item.exceptions.EntityNotFoundException;
 import com.example.gateway.item.repositories.IItemRepository;
+import com.example.gateway.item.services.IItemService;
+import com.example.gateway.item.services.IOrderService;
+import com.example.gateway.item.services.IProductService;
 import jakarta.persistence.PersistenceException;
-import lombok.extern.slf4j.Slf4j;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
@@ -20,8 +25,8 @@ import java.util.Locale;
 import java.util.Optional;
 
 @Service
-@Slf4j
 public class ItemServiceImpl implements IItemService {
+    private final Logger logger = LoggerFactory.getLogger(ItemServiceImpl.class);
     @Autowired
     private IItemRepository repository;
 
@@ -40,6 +45,8 @@ public class ItemServiceImpl implements IItemService {
     @Override
     @Transactional
     public ItemResponseDto create(ItemRequestDto request) {
+        logger.info("ItemServiceImpl.create(): {}", request);
+
         ProductDto productDto = productService.findById(request.getProductId());
 
         Product product = productService.findEntityById(productDto.getId());
@@ -51,7 +58,7 @@ public class ItemServiceImpl implements IItemService {
         try {
             item = repository.save(item);
         } catch(PersistenceException ex) {
-            log.error("Error al intentar registrar el Item: " + ex.getMessage());
+            logger.error("Cannot register an Item: " + ex.getMessage());
             throw new PersistenceException(ex.getMessage());
         }
 
@@ -61,10 +68,11 @@ public class ItemServiceImpl implements IItemService {
     @Override
     @Transactional(readOnly = true)
     public ItemResponseDto findById(Long id) {
+        logger.info("ItemServiceImpl.findById(): {}", id);
         Optional<Item> item = repository.findById(id);
 
         if(item.isEmpty()) {
-            log.error("Item Not Found: " + id);
+            logger.error("Item Not Found: " + id);
             throw new EntityNotFoundException(messageSource.getMessage("item.notfound", null, Locale.getDefault()) + " " + id);
         }
 
@@ -74,9 +82,11 @@ public class ItemServiceImpl implements IItemService {
     @Override
     @Transactional(readOnly = true)
     public List<ItemResponseDto> findAll() {
+        logger.info("ItemServiceImpl.findAll().");
         List<Item> items = repository.findAll();
 
         if(items.isEmpty()) {
+            logger.error("The Items list is empty.");
             throw new EntityNotFoundException(messageSource.getMessage("item.notfound.list", null, Locale.getDefault()));
         }
 

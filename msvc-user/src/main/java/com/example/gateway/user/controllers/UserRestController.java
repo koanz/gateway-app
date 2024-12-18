@@ -6,6 +6,7 @@ import com.example.gateway.commons.entities.User;
 import com.example.gateway.commons.models.PaginationRequest;
 import com.example.gateway.user.services.IUserService;
 import com.example.gateway.user.services.IUserRoleService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,7 +83,9 @@ public class UserRestController {
 
     @GetMapping("/find-all")
     @ResponseBody
-    public ResponseEntity<?> getAll(PaginationRequest pageRequest) {
+    public ResponseEntity<?> getAll(PaginationRequest pageRequest, HttpServletRequest request) {
+        logger.info("UserRestController.find-all: {}", request);
+
         return ResponseEntity.ok(service.findAll(pageRequest));
     }
 

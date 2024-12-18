@@ -1,9 +1,10 @@
-package com.example.gateway.item.services;
+package com.example.gateway.item.services.impl;
 
 import com.example.gateway.commons.dtos.ProductDto;
 import com.example.gateway.commons.entities.Product;
 import com.example.gateway.item.feign.IProductFeignClient;
 import com.example.gateway.item.repositories.IProductRepository;
+import com.example.gateway.item.services.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

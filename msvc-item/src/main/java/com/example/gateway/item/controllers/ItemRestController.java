@@ -64,7 +64,7 @@ public class ItemRestController {
 
     @GetMapping("/find/{id}")
     @ResponseBody
-    public ResponseEntity<?> create(@PathVariable Long id) {
+    public ResponseEntity<?> findById(@PathVariable Long id) {
         logger.info("ItemRestController.find: {}", id);
         return ResponseEntity.ok(service.findById(id));
     }

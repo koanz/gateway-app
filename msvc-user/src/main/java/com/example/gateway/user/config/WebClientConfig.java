@@ -8,7 +8,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class WebClientConfig {
-    @Value("${config.baseurl.endpoint.msvc-products=http://msvc-client}")
+    @Value("${config.baseurl.endpoint.msvc-client=http://msvc-cliente}")
     private String url;
 
     @Bean

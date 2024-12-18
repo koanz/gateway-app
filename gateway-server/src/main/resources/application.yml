@@ -83,7 +83,13 @@ spring:
             - Path=/api/items/**
           filters:
             - StripPrefix=2
-            - AddRequestHeader=token-request, aabbsjdfjsaj
-            - AddResponseHeader=token-response, 234340823
-            - AddRequestParameter=name, Andres
-            - SetResponseHeader=Content-Type, text/plain
+            #- AddRequestHeader=token-request, aabbsjdfjsaj
+            #- AddResponseHeader=token-response, 234340823
+            #- AddRequestParameter=name, Andres
+            #- SetResponseHeader=Content-Type, text/plain
+        - id: msvc-order
+          uri: lb://msvc-order
+          predicates:
+            - Path=/api/orders/**
+          filters:
+            - StripPrefix=2
