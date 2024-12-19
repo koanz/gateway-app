@@ -63,6 +63,19 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     @Transactional(readOnly = true)
+    public Product getById(Long id) {
+        Optional<Product> product = repository.findById(id);
+
+        if(product.isEmpty()) {
+            log.error("Product Not Found: " + id);
+            throw new EntityNotFoundException(messageSource.getMessage("product.notfound", null, Locale.getDefault()) + " " + id);
+        }
+
+        return product.get();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<ProductDto> findAll() {
         List<Product> products = repository.findAll();
 

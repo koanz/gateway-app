@@ -26,9 +26,16 @@ public class ProductRestController {
 
     @GetMapping("/find/{id}")
     @ResponseBody
-    public ResponseEntity<?> getById(@PathVariable Long id) {
+    public ResponseEntity<?> findById(@PathVariable Long id) {
         logger.info("ProductoRestController.find: {}", id);
         return ResponseEntity.ok(service.findById(id));
+    }
+
+    @GetMapping("/get/{id}")
+    @ResponseBody
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        logger.info("ProductoRestController.get: {}", id);
+        return ResponseEntity.ok(service.getById(id));
     }
 
     @GetMapping("/find-all")

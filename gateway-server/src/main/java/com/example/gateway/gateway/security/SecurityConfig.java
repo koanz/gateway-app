@@ -39,7 +39,9 @@ public class SecurityConfig {
                                     "/api/users/v1/user/update/**").hasRole("USER")
                             .pathMatchers(HttpMethod.GET, "/api/products/v1/**", "/api/items/v1/**", "/api/orders/v1/**").hasAnyRole("ADMIN", "USER")
                             .pathMatchers(HttpMethod.POST,
-                                    "/api/users/v1/admin/create", "/api/products/v1/create", "/api/items/v1/create", "/api/orders/v1/create").hasRole("ADMIN")
+                                    "/api/products/v1/create", "/api/items/v1/create", "/api/orders/v1/create").hasAnyRole("ADMIN", "USER")
+                            .pathMatchers(HttpMethod.POST,
+                                    "/api/users/v1/admin/create").hasRole("ADMIN")
                             .pathMatchers(HttpMethod.GET,
                                     "/api/clients/v1/admin/**", "/api/users/v1/admin/**", "/api/products/v1/admin/**").hasRole("ADMIN")
                             .pathMatchers(HttpMethod.POST,

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "msvc-user")
 public interface IUserFeignClient {
 
-    @GetMapping("/v1/find/{id}")
+    @GetMapping("/v1/user/find/{id}")
     public UserResponseDto findById(@PathVariable Long id);
 
 }

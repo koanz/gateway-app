@@ -2,6 +2,7 @@ package com.example.gateway.order.services.impl;
 
 import com.example.gateway.commons.dtos.MessageResponse;
 import com.example.gateway.commons.dtos.OrderDto;
+import com.example.gateway.commons.dtos.ProductDto;
 import com.example.gateway.commons.dtos.requests.OrderRequestDto;
 import com.example.gateway.commons.dtos.responses.UserResponseDto;
 import com.example.gateway.commons.entities.Item;
@@ -18,6 +19,8 @@ import com.example.gateway.order.services.IProductService;
 import com.example.gateway.order.services.IUserService;
 import com.example.gateway.order.validations.ValidationOrder;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
@@ -29,8 +32,8 @@ import java.util.Locale;
 import java.util.Optional;
 
 @Service
-@Slf4j
 public class OrderServiceImpl implements IOrderService {
+    private final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Autowired
     private OrderMapper mapper;
@@ -66,17 +69,14 @@ public class OrderServiceImpl implements IOrderService {
         // Crear los ítems y asociarlos a la orden
         List<Item> items = request.getItems().stream()
                 .map(itemDto -> {
-                    //Product product = productService.findEntityById(itemDto.getProductId());
+                    Product product = productService.findById(itemDto.getProductId());
 
-                    /*Item item = new Item();
+                    Item item = new Item();
                     item.setQuantity(itemDto.getQuantity());
                     item.setProduct(product);
-                    item.setOrder(order);*/
-
-
-                    return new Item(null, itemDto.getQuantity(), productService.findEntityById(itemDto.getProductId()), order, new Date(), new Date());
+                    item.setOrder(order);
+                    return item;
                 }).toList();
-
         if(!validationOrder.isTotalValid(request.getTotalPrice(), items)) {
             throw new CustomException("The total value doesn't match.");
         }
@@ -85,8 +85,9 @@ public class OrderServiceImpl implements IOrderService {
             order.setItems(items);
 
             repository.save(order);
+            logger.info("Order created: {}", order);
         } catch (Exception ex) {
-            log.error("Error al intentar registrar la Orden: " + ex.getMessage());
+            logger.error("Error al intentar registrar la Orden: " + ex.getMessage());
             return null;
         }
 
@@ -99,7 +100,7 @@ public class OrderServiceImpl implements IOrderService {
         Optional<Order> order = repository.findById(id);
 
         if(order.isEmpty()) {
-            log.error("Order Not Found: " + id);
+            logger.error("Order Not Found: " + id);
             throw new EntityNotFoundException(messageSource.getMessage("order.notfound", null, Locale.getDefault()) + " " + id);
         }
 
