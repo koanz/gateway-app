@@ -10,7 +10,8 @@ import reactor.core.publisher.Mono;
 
 @Component
 public class LoggingGlobalFilter implements GlobalFilter {
-    private final Logger logger = LoggerFactory.getLogger(LoggingGlobalFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoggingGlobalFilter.class);
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         // Loguear detalles de la petición entrante
@@ -21,4 +22,5 @@ public class LoggingGlobalFilter implements GlobalFilter {
             logger.info("Response: {}", exchange.getResponse().getStatusCode());
         }));
     }
+
 }

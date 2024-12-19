@@ -31,3 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
+
+zipkin-server-3.4.3-exec.jar

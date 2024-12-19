@@ -42,7 +42,7 @@ public class ItemServiceImpl implements IItemService {
 
     @Override
     public ItemResponseDto findById(Long id) {
-        return null;
+        return feignClient.findById(id);
     }
 
     @Override
