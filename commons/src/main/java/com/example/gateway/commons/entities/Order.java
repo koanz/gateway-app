@@ -30,6 +30,8 @@ public class Order implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
+    private String description;
+
     @Temporal(TemporalType.TIMESTAMP)
     @JoinColumn(name = "created_at")
     private Date createdAt;

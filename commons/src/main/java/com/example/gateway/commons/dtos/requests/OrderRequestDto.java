@@ -23,6 +23,8 @@ public class OrderRequestDto {
     @JsonProperty("user_id")
     private Long userId;
 
+    private String description;
+
     @NotNull(message = "The items are required.")
     private List<ItemRequestDto> items;
 }

@@ -10,9 +10,10 @@ import org.springframework.data.domain.Page;
 
 public interface IUserService {
     public MessageResponse create(UserRequestDto request);
-    public UserResponseDto findById(Long id);
-    public User findByUsername(String username);
 
+    public UserResponseDto findById(Long id);
+
+    public User findByUsername(String username);
 
     public Page<UserResponseDto> findAll(PaginationRequest pageRequest);
 

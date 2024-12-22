@@ -1,6 +1,5 @@
 package com.example.gateway.item.services.impl;
 
-import com.example.gateway.commons.dtos.*;
 import com.example.gateway.commons.dtos.requests.ItemRequestDto;
 import com.example.gateway.commons.dtos.responses.ItemResponseDto;
 import com.example.gateway.commons.entities.Item;
@@ -8,9 +7,8 @@ import com.example.gateway.commons.entities.Product;
 import com.example.gateway.commons.mappers.ItemMapper;
 import com.example.gateway.item.exceptions.EntityNotFoundException;
 import com.example.gateway.item.repositories.IItemRepository;
+import com.example.gateway.item.repositories.IProductRepository;
 import com.example.gateway.item.services.IItemService;
-import com.example.gateway.item.services.IOrderService;
-import com.example.gateway.item.services.IProductService;
 import jakarta.persistence.PersistenceException;
 
 import org.slf4j.Logger;
@@ -34,10 +32,7 @@ public class ItemServiceImpl implements IItemService {
     private ItemMapper mapper;
 
     @Autowired
-    private IOrderService orderService;
-
-    @Autowired
-    private IProductService productService;
+    private IProductRepository productRepository;
 
     @Autowired
     private MessageSource messageSource;
@@ -47,13 +42,15 @@ public class ItemServiceImpl implements IItemService {
     public ItemResponseDto create(ItemRequestDto request) {
         logger.info("ItemServiceImpl.create(): {}", request);
 
-        ProductDto productDto = productService.findById(request.getProductId());
-
-        Product product = productService.findEntityById(productDto.getId());
+        Optional<Product> product = productRepository.findById(request.getProductId());
+        if(!product.isPresent()) {
+            logger.error("Product Not Found: " + request.getProductId());
+            throw new EntityNotFoundException("Cannot register an Item. Cause: The Product with ID: " + request.getProductId() + " doesn't exist.");
+        }
 
         Item item = new Item();
         item.setQuantity(request.getQuantity());
-        item.setProduct(product);
+        item.setProduct(product.get());
 
         try {
             item = repository.save(item);

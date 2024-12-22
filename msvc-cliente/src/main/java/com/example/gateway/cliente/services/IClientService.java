@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 public interface IClientService {
     public MessageResponse create(ClientRequestDto request);
     public ClientResponseDto findById(Long id);
-
     public Page<ClientResponseDto> findAll(PaginationRequest pageRequest);
+    public MessageResponse update(Long id, ClientRequestDto request);
 
 }

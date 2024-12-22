@@ -1,5 +1,6 @@
 package com.example.gateway.oauthserver.services;
 
+import brave.Tracer;
 import com.example.gateway.oauthserver.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     private WebClient client;
 
+    @Autowired
+    private Tracer tracer;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         logger.info("Ejecutando proceso de login UserService.loadUserByUsername con {}", username);
@@ -49,15 +53,18 @@ public class UserService implements UserDetailsService {
                     .collect(Collectors.toList());
 
             logger.info("Se ha realizado con éxito el login por username: {}", user);
+            tracer.currentSpan().tag("success.login", "Se ha realizado con éxito el login por username: " + user.getUsername());
 
             return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                     user.getEnabled(), true, true, true, roles);
         } catch (WebClientResponseException e) {
             String errorDetails = e.getResponseBodyAsString();
             logger.error("User Not Found with username: " + username + ". Error details: " + errorDetails);
-            throw new UsernameNotFoundException("User Not Found with username: " + username + ". Error details: " + errorDetails, e);
+            tracer.currentSpan().tag("error.login.message", "User Not Found with username: " + username + ". Error details: " + errorDetails);
+            throw new UsernameNotFoundException("User Not Found with username: " + username + ". Error: " + e.getMessage());
         } catch (WebClientRequestException e) {
             logger.error("Request error while fetching user: " + username);
+            tracer.currentSpan().tag("error.login.message", "Request error while fetching user: " + username + ". Error: " + e.getMessage());
             throw new UsernameNotFoundException("Request error while fetching user: " + username, e);
         }
     }

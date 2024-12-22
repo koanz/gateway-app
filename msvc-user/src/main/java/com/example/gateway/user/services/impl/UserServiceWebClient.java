@@ -32,7 +32,7 @@ public class UserServiceWebClient implements IUserServiceCb {
     public UserResponseDto findByIdCb(Long id) {
         Optional<User> user = repository.findById(id);
 
-        UserResponseDto userResponse = webClientBuilder.build().get().uri("http://MSVC-CLIENTE/v1/find/{id}", user.get().getClient().getId())
+        UserResponseDto userResponse = webClientBuilder.build().get().uri("/v1/admin/find/{id}", user.get().getClient().getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(ClientResponseDto.class)

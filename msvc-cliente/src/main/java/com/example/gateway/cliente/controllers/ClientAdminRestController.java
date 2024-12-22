@@ -2,7 +2,9 @@ package com.example.gateway.cliente.controllers;
 
 import com.example.gateway.cliente.services.IClientService;
 import com.example.gateway.commons.dtos.requests.ClientRequestDto;
+import com.example.gateway.commons.dtos.requests.UserUpdateDto;
 import com.example.gateway.commons.models.PaginationRequest;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,6 +56,14 @@ public class ClientAdminRestController {
         logger.info("ClienteAdminRestController.findAll()");
         logger.info("Request Parameter: {}", name);
         return ResponseEntity.ok(service.findAll(pageRequest));
+    }
+
+    @PutMapping("/update/{id}")
+    @ResponseBody
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody @Valid ClientRequestDto request) {
+        logger.info("ClienteAdminRestController.update: {}", id);
+        logger.info("Update Client: {}", request);
+        return ResponseEntity.ok(service.update(id, request));
     }
 
 }

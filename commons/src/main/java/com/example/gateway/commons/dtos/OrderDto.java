@@ -19,5 +19,6 @@ public class OrderDto {
     private Long id;
     private UserResponseDto user;
     private Double total;
+    private String description;
     private List<ItemResponseDto> items;
 }

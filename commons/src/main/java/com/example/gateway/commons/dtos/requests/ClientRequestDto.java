@@ -17,7 +17,7 @@ public class ClientRequestDto {
     @JsonProperty("company_name")
     private String companyName;
 
-    //@NotEmpty(message = "Company name is required")
+    @NotEmpty(message = "CUIT is required")
     private String cuit;
 
     @Size(max = 120, message = "Address must not exceed 120 characters.")

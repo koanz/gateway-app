@@ -2,9 +2,7 @@ package com.example.gateway.order.services.impl;
 
 import com.example.gateway.commons.dtos.MessageResponse;
 import com.example.gateway.commons.dtos.OrderDto;
-import com.example.gateway.commons.dtos.ProductDto;
 import com.example.gateway.commons.dtos.requests.OrderRequestDto;
-import com.example.gateway.commons.dtos.responses.UserResponseDto;
 import com.example.gateway.commons.entities.Item;
 import com.example.gateway.commons.entities.Order;
 import com.example.gateway.commons.entities.Product;
@@ -13,12 +11,10 @@ import com.example.gateway.commons.mappers.OrderMapper;
 import com.example.gateway.order.exceptions.CustomException;
 import com.example.gateway.order.exceptions.EntityNotFoundException;
 import com.example.gateway.order.repositories.IOrderRepository;
-import com.example.gateway.order.services.IItemService;
+import com.example.gateway.order.repositories.IProductRepository;
+import com.example.gateway.order.repositories.IUserRepository;
 import com.example.gateway.order.services.IOrderService;
-import com.example.gateway.order.services.IProductService;
-import com.example.gateway.order.services.IUserService;
 import com.example.gateway.order.validations.ValidationOrder;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +22,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -42,13 +37,10 @@ public class OrderServiceImpl implements IOrderService {
     private IOrderRepository repository;
 
     @Autowired
-    private IItemService itemService;
+    private IUserRepository userRepository;
 
     @Autowired
-    private IUserService userService;
-
-    @Autowired
-    private IProductService productService;
+    private IProductRepository productRepository;
 
     @Autowired
     private MessageSource messageSource;
@@ -59,21 +51,28 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     @Transactional
     public MessageResponse create(OrderRequestDto request) {
-        UserResponseDto userResponseDto = userService.findById(request.getUserId());
-        User user = userService.findEntityById(userResponseDto.getId());
+        Optional<User> user = userRepository.findById(request.getUserId());
+        if(user.isEmpty()) {
+            logger.error("User Not Found: " + request.getUserId());
+            throw new EntityNotFoundException("Cannot create an Order. Cause: The User with ID " + request.getUserId() + " doesn't exist.");
+        }
 
         final Order order = new Order();
-        order.setUser(user);
+        order.setUser(user.get());
         order.setTotal(request.getTotalPrice());
 
         // Crear los ítems y asociarlos a la orden
         List<Item> items = request.getItems().stream()
                 .map(itemDto -> {
-                    Product product = productService.findById(itemDto.getProductId());
+                    Optional<Product> product = productRepository.findById(itemDto.getProductId());
+                    if(product.isEmpty()) {
+                        logger.error("Product Not Found: " + itemDto.getProductId());
+                        throw new EntityNotFoundException("Cannot create an Order. Cause: The Product with ID " + itemDto.getProductId() + " doesn't exist.");
+                    }
 
                     Item item = new Item();
                     item.setQuantity(itemDto.getQuantity());
-                    item.setProduct(product);
+                    item.setProduct(product.get());
                     item.setOrder(order);
                     return item;
                 }).toList();
@@ -81,9 +80,8 @@ public class OrderServiceImpl implements IOrderService {
             throw new CustomException("The total value doesn't match.");
         }
 
+        order.setItems(items);
         try {
-            order.setItems(items);
-
             repository.save(order);
             logger.info("Order created: {}", order);
         } catch (Exception ex) {

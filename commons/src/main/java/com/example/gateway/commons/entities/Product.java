@@ -24,6 +24,10 @@ public class Product implements Serializable {
 
     private Double price;
 
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "client_id")
+    private Client client;
+
     @Temporal(TemporalType.TIMESTAMP)
     @JoinColumn(name = "created_at")
     private Date createdAt;

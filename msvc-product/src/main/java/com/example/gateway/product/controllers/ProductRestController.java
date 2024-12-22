@@ -10,7 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("/v1/user")
 public class ProductRestController {
     private final Logger logger = LoggerFactory.getLogger(ProductRestController.class);
 
@@ -44,5 +44,13 @@ public class ProductRestController {
         // extraer el cliente id del token
         logger.info("ProductoRestController.find-all");
         return ResponseEntity.ok(service.findAll());
+    }
+
+    @PutMapping("/update/{id}")
+    @ResponseBody
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ProductDto request) {
+        // extraer el cliente id del token
+        logger.info("ProductoRestController.update: {} {}", id, request);
+        return ResponseEntity.ok(service.update(id, request));
     }
 }

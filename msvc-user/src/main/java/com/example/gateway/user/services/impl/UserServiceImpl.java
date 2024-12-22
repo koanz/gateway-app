@@ -19,7 +19,9 @@ import com.example.gateway.user.services.IClientService;
 import com.example.gateway.user.services.IUserRoleService;
 import com.example.gateway.user.services.IUserService;
 import jakarta.persistence.PersistenceException;
-import lombok.extern.slf4j.Slf4j;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
@@ -35,8 +37,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
-@Slf4j
 public class UserServiceImpl implements IUserService {
+    private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     @Autowired
     private IUserRepository repository;
 
@@ -65,7 +67,7 @@ public class UserServiceImpl implements IUserService {
         List<Role> roles = userRoleService.findRolesById(request.getRolesId());
 
         if(clientResponse == null) {
-            log.error("Client Not Found with id: " + request.getClientId());
+            logger.error("Client Not Found with id: " + request.getClientId());
             throw new EntityNotFoundException(messageSource.getMessage("client.notfound", null, Locale.getDefault()) + " " + request.getClientId());
         }
 
@@ -92,7 +94,7 @@ public class UserServiceImpl implements IUserService {
     public UserResponseDto findById(Long id) {
         Optional<User> user = repository.findById(id);
         if(user.isEmpty()) {
-            log.error("User Not Found: " + id);
+            logger.error("User Not Found: " + id);
             throw new EntityNotFoundException(messageSource.getMessage("user.notfound", null, Locale.getDefault()) + " " + id);
         }
 

@@ -1,8 +1,6 @@
 package com.example.gateway.item.services.impl;
 
 import com.example.gateway.commons.dtos.OrderDto;
-import com.example.gateway.commons.entities.Order;
-import com.example.gateway.item.services.IOrderService;
 import com.example.gateway.item.services.IOrderWebClientService;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
