@@ -118,4 +118,19 @@ public class OrderServiceImpl implements IOrderService {
         return orders.stream().map(mapper::entityToResponse).toList();
     }
 
+    @Override
+    @Transactional
+    public MessageResponse delete(Long id) {
+        Optional<Order> order = repository.findById(id);
+
+        if(order.isEmpty()) {
+            logger.error("Order Not Found: " + id);
+            throw new EntityNotFoundException(messageSource.getMessage("order.notfound", null, Locale.getDefault()) + " " + id);
+        }
+
+        repository.delete(order.get());
+
+        return new MessageResponse(messageSource.getMessage("order.deleted", null, Locale.getDefault()));
+    }
+
 }

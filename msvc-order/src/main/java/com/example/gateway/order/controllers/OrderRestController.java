@@ -38,4 +38,11 @@ public class OrderRestController {
         return ResponseEntity.ok(service.findAll());
     }
 
+    @DeleteMapping("/delete/{id}")
+    @ResponseBody
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        logger.info("OrderRestController.delete: {}", id);
+        return ResponseEntity.ok(service.delete(id));
+    }
+
 }

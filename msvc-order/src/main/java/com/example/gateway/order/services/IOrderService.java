@@ -8,9 +8,8 @@ import java.util.List;
 
 public interface IOrderService {
     public MessageResponse create(OrderRequestDto request);
-
     public OrderDto findById(Long id);
-
     public List<OrderDto> findAll();
+    public MessageResponse delete(Long id);
 
 }
