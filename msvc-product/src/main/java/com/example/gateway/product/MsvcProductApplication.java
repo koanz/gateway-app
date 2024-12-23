@@ -11,7 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableDiscoveryClient
 @EnableFeignClients
 @EntityScan({"com.example.gateway.commons.entities"})
-@ComponentScan(basePackages = {"com.example.gateway.product", "com.example.gateway.commons.mappers"})
+@ComponentScan(basePackages = {"com.example.gateway.product", "com.example.gateway.commons.dtos", "com.example.gateway.commons.mappers"})
 public class MsvcProductApplication {
 
 	public static void main(String[] args) {

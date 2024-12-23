@@ -8,7 +8,6 @@ import com.example.gateway.commons.mappers.ProductMapper;
 import com.example.gateway.product.exceptions.EntityNotFoundException;
 import com.example.gateway.product.respositories.IClientRepository;
 import com.example.gateway.product.respositories.IProductRepository;
-import com.example.gateway.product.services.IClientService;
 import com.example.gateway.product.services.IProductService;
 
 import org.slf4j.Logger;
