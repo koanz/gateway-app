@@ -1,5 +1,7 @@
 package com.example.gateway.product.services.impl;
 
+
+
 import com.example.gateway.commons.dtos.MessageResponse;
 import com.example.gateway.commons.dtos.ProductDto;
 import com.example.gateway.commons.entities.Client;
@@ -9,7 +11,6 @@ import com.example.gateway.product.exceptions.EntityNotFoundException;
 import com.example.gateway.product.respositories.IClientRepository;
 import com.example.gateway.product.respositories.IProductRepository;
 import com.example.gateway.product.services.IProductService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,6 +104,7 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
+    @Transactional
     public MessageResponse update(Long id, ProductDto request) {
         Optional<Product> registered = repository.findById(id);
 

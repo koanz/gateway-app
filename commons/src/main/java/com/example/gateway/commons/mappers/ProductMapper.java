@@ -4,8 +4,6 @@ import com.example.gateway.commons.dtos.ProductDto;
 import com.example.gateway.commons.entities.Product;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
-
 @Component
 public class ProductMapper {
     public ProductDto entityToResponseDto(Product entity) {
