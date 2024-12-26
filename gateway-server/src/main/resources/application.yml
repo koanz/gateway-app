@@ -24,7 +24,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://127.0.0.1:9000
+#          issuer-uri: http://127.0.0.1:9000
+          issuer-uri: ${IP_ADDR:http://127.0.0.1:9000}
       client:
         registration:
           client-app:
@@ -39,7 +40,8 @@ spring:
             client-name: client-app
         provider:
           spring:
-            issuer-uri: http://127.0.0.1:9000
+#            issuer-uri: http://127.0.0.1:9000
+            issuer-uri: ${IP_ADDR:http://127.0.0.1:9000}
   cloud:
     gateway:
       routes:
@@ -61,35 +63,35 @@ spring:
             - Path=/api/users/**
           filters:
             - StripPrefix=2
-        - id: msvc-product
-          uri: lb://msvc-product
-          predicates:
-            - Path=/api/products/**
+#        - id: msvc-product
+#          uri: lb://msvc-product
+#          predicates:
+#            - Path=/api/products/**
           # - Header=token, \d+
           # - Method=GET, POST
           # - Query=color
           # - Cookie=color, azul
           # - Header=Content-Type, application/json
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: products
-                statusCodes: 500
-                fallbackUri: forward:/api/items/5
-            - StripPrefix=2
-        - id: msvc-item
-          uri: lb://msvc-item
-          predicates:
-            - Path=/api/items/**
-          filters:
-            - StripPrefix=2
+#          filters:
+#            - name: CircuitBreaker
+#              args:
+#                name: products
+#                statusCodes: 500
+#                fallbackUri: forward:/api/items/5
+#            - StripPrefix=2
+#        - id: msvc-item
+#          uri: lb://msvc-item
+#          predicates:
+#            - Path=/api/items/**
+#          filters:
+#            - StripPrefix=2
             #- AddRequestHeader=token-request, aabbsjdfjsaj
             #- AddResponseHeader=token-response, 234340823
             #- AddRequestParameter=name, Andres
             #- SetResponseHeader=Content-Type, text/plain
-        - id: msvc-order
-          uri: lb://msvc-order
-          predicates:
-            - Path=/api/orders/**
-          filters:
-            - StripPrefix=2
+#        - id: msvc-order
+#          uri: lb://msvc-order
+#          predicates:
+#            - Path=/api/orders/**
+#          filters:
+#            - StripPrefix=2

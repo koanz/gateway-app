@@ -1,0 +1,104 @@
+#version: '3.8'
+services:
+  eureka-server:
+    image: eureka-server:v1
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - springcloud-network
+
+  config-server:
+    image: config-server:v1
+    container_name: config-server
+    ports:
+      - "8888:8888"
+    networks:
+      - springcloud-network
+    depends_on:
+      - eureka-server
+
+  postgres:
+    image: postgres:13.12
+    container_name: postgres
+    ports:
+      - "5433:5432"
+    networks:
+      - springcloud-network
+    environment:
+      POSTGRES_USER: order_app_user
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: order_app_db
+
+#  zipkin:
+#    container_name: zipkin-server:v1
+#    image: zipkin-server
+#    ports:
+#      - "9411:9411"
+#    restart: always
+#    networks:
+#      - springcloud-network
+#    environment:
+#      STORAGE_TYPE: postgresql
+#      POSTGRES_USER: zipkin
+#      POSTGRES_PASS: zipkin
+#      POSTGRES_DB: zipkin
+#    depends_on:
+#      - postgres
+
+  msvc-cliente:
+    image: msvc-cliente:v1
+    container_name: msvc-cliente
+    networks:
+      - springcloud-network
+    depends_on:
+      - postgres
+      - eureka-server
+      - config-server
+      - zipkin
+
+  msvc-user:
+    image: msvc-user:v1
+    container_name: msvc-user
+    networks:
+      - springcloud-network
+    depends_on:
+      - postgres
+      - eureka-server
+      - config-server
+      - zipkin
+      - msvc-cliente
+
+  oauth-server:
+    image: oauth-server:v1
+    container_name: oauth-server
+    ports:
+      - "9000:9000"
+    networks:
+      - springcloud-network
+    depends_on:
+      - eureka-server
+      - zipkin
+      - msvc-user
+
+  gateway-server:
+    image: gateway-server:v1
+    container_name: gateway-server
+    ports:
+      - "8090:8090"
+    networks:
+      - springcloud-network
+    environment:
+      IP_ADDR: http://192.168.100.10:9000
+    depends_on:
+      - eureka-server
+      - config-server
+      - zipkin
+      - msvc-cliente
+      - msvc-user
+
+  # Añade aquí otros microservicios, como msvc-product, msvc-item, etc...
+
+networks:
+  springcloud-network:
+    driver: bridge
