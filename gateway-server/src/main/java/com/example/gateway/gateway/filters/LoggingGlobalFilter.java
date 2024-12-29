@@ -14,11 +14,11 @@ public class LoggingGlobalFilter implements GlobalFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        // Loguear detalles de la petición entrante
+        // Log detalles de la petición entrante
         logger.info("Request: {} {}", exchange.getRequest().getMethod(), exchange.getRequest().getURI());
         // Continuar con el siguiente filtro en la cadena
         return chain.filter(exchange).then(Mono.fromRunnable(() -> {
-            // Loguear detalles de la respuesta saliente
+            // Log detalles de la respuesta saliente
             logger.info("Response: {}", exchange.getResponse().getStatusCode());
         }));
     }

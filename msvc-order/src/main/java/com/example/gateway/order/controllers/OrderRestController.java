@@ -1,6 +1,5 @@
 package com.example.gateway.order.controllers;
 
-import com.example.gateway.commons.dtos.OrderDto;
 import com.example.gateway.commons.dtos.requests.OrderRequestDto;
 import com.example.gateway.order.services.IOrderService;
 import jakarta.validation.Valid;

@@ -1,13 +1,10 @@
 package com.example.gateway.commons.dtos.responses;
 
-import com.example.gateway.commons.dtos.responses.ClientResponseDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter

@@ -63,10 +63,25 @@ spring:
             - Path=/api/users/**
           filters:
             - StripPrefix=2
-#        - id: msvc-product
-#          uri: lb://msvc-product
-#          predicates:
-#            - Path=/api/products/**
+        - id: msvc-item
+          uri: lb://msvc-item
+          predicates:
+            - Path=/api/items/**
+          filters:
+            - StripPrefix=2
+        - id: MSVC-PRODUCTO
+          uri: lb://MSVC-PRODUCTO
+          predicates:
+            - Path=/api/productos/**
+          filters:
+            - StripPrefix=2
+        - id: msvc-order
+          uri: lb://msvc-order
+          predicates:
+            - Path=/api/orders/**
+          filters:
+            - StripPrefix=2
+
           # - Header=token, \d+
           # - Method=GET, POST
           # - Query=color

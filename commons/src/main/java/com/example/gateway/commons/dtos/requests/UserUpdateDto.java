@@ -1,6 +1,5 @@
 package com.example.gateway.commons.dtos.requests;
 
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

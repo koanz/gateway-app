@@ -34,18 +34,19 @@ public class SecurityConfig {
                             .pathMatchers(HttpMethod.POST,
                                     "/api/users/v1/user/create").hasRole("USER")
                             .pathMatchers(HttpMethod.GET,
-                                    "/api/users/v1/user/find/**", "/api/users/v1/user/find-all/**").hasRole("USER")
-                            .pathMatchers(HttpMethod.PUT,
-                                    "/api/users/v1/user/update/**").hasRole("USER")
-                            .pathMatchers(HttpMethod.GET, "/api/products/v1/**", "/api/items/v1/**", "/api/orders/v1/**").hasAnyRole("ADMIN", "USER")
+                                    "/api/users/v1/user/find/**", "/api/users/v1/user/find-all/**",
+                                    "/api/productos/v1/user/**").hasRole("USER")
+                            .pathMatchers(HttpMethod.PUT,"/api/users/v1/user/update/**", "/api/productos/v1/user/update/**").hasRole("USER")
+                            .pathMatchers(HttpMethod.GET, "/api/items/v1/**", "/api/orders/v1/**").hasAnyRole("ADMIN", "USER")
                             .pathMatchers(HttpMethod.POST,
                                     "/api/products/v1/create", "/api/items/v1/create", "/api/orders/v1/create").hasAnyRole("ADMIN", "USER")
                             .pathMatchers(HttpMethod.POST,
                                     "/api/users/v1/admin/create").hasRole("ADMIN")
                             .pathMatchers(HttpMethod.GET,
-                                    "/api/clients/v1/admin/**", "/api/users/v1/admin/**", "/api/products/v1/admin/**").hasRole("ADMIN")
+                                    "/api/clients/v1/admin/**", "/api/users/v1/admin/**"/*,
+                                    "/api/products/v1/admin/find/**", "/api/products/v1/admin/find-all/**"*/).hasRole("ADMIN")
                             .pathMatchers(HttpMethod.POST,
-                                    "/api/clients/v1/admin/create", "/api/users/v1/admin/create", "/api/products/v1/admin/create").hasRole("ADMIN")
+                                    "/api/clients/v1/admin/create", "/api/users/v1/admin/create"/*, "/api/products/v1/admin/create"*/).hasRole("ADMIN")
                             .anyExchange().authenticated();
                 }).cors(csrf -> csrf.disable())
                 .oauth2Login(withDefaults())

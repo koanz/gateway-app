@@ -33,7 +33,7 @@
 		<module>commons</module>
 		<module>msvc-cliente</module>
 		<module>msvc-user</module>
-		<module>msvc-product</module>
+		<module>msvc-producto</module>
 		<module>msvc-item</module>
 		<module>msvc-order</module>
 		<module>oauth-server</module>
