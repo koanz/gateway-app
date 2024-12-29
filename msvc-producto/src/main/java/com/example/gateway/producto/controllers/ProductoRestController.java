@@ -1,6 +1,6 @@
 package com.example.gateway.producto.controllers;
 
-import com.example.gateway.commons.dtos.requests.ProductRequestDto;
+import com.example.gateway.commons.dtos.ProductoDto;
 import com.example.gateway.producto.services.IProductoService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -20,7 +20,7 @@ public class ProductoRestController {
 
     @PostMapping("/create")
     @ResponseBody
-    public ResponseEntity<?> create(@RequestBody @Valid ProductRequestDto request) {
+    public ResponseEntity<?> create(@RequestBody @Valid ProductoDto request) {
         logger.info("ProductRestController.create: {}", request);
         return ResponseEntity.ok(service.create(request));
     }
@@ -49,7 +49,7 @@ public class ProductoRestController {
 
     @PutMapping("/update/{id}")
     @ResponseBody
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ProductRequestDto request) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ProductoDto request) {
         // extraer el cliente id del token
         logger.info("ProductoRestController.update: {} {}", id, request);
         return ResponseEntity.ok(service.update(id, request));

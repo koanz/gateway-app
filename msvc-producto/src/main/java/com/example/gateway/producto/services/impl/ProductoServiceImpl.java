@@ -1,11 +1,10 @@
 package com.example.gateway.producto.services.impl;
 
 import com.example.gateway.commons.dtos.MessageResponse;
-import com.example.gateway.commons.dtos.ProductDto;
-import com.example.gateway.commons.dtos.requests.ProductRequestDto;
+import com.example.gateway.commons.dtos.ProductoDto;
 import com.example.gateway.commons.entities.Client;
 import com.example.gateway.commons.entities.Product;
-import com.example.gateway.commons.mappers.ProductMapper;
+import com.example.gateway.commons.mappers.ProductoMapper;
 import com.example.gateway.producto.exceptions.EntityNotFoundException;
 import com.example.gateway.producto.repositories.IClientRepository;
 import com.example.gateway.producto.repositories.IProductoRepository;
@@ -32,7 +31,7 @@ public class ProductoServiceImpl implements IProductoService {
     private IProductoRepository repository;
 
     @Autowired
-    private ProductMapper mapper;
+    private ProductoMapper mapper;
 
     @Autowired
     private IClientRepository clientRepository;
@@ -42,7 +41,7 @@ public class ProductoServiceImpl implements IProductoService {
 
     @Override
     @Transactional
-    public MessageResponse create(ProductRequestDto request) {
+    public MessageResponse create(ProductoDto request) {
         Optional<Client> client = clientRepository.findById(request.getClientId());
 
         if(client.isEmpty()) {
@@ -67,7 +66,7 @@ public class ProductoServiceImpl implements IProductoService {
 
     @Override
     @Transactional(readOnly = true)
-    public ProductDto findById(Long id) {
+    public ProductoDto findById(Long id) {
         Optional<Product> product = repository.findById(id);
 
         if(product.isEmpty()) {
@@ -93,7 +92,7 @@ public class ProductoServiceImpl implements IProductoService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ProductDto> findAll() {
+    public List<ProductoDto> findAll() {
         List<Product> products = repository.findAll();
 
         if(products.isEmpty()) {
@@ -105,7 +104,7 @@ public class ProductoServiceImpl implements IProductoService {
 
     @Override
     @Transactional
-    public MessageResponse update(Long id, ProductRequestDto request) {
+    public MessageResponse update(Long id, ProductoDto request) {
         Optional<Product> registered = repository.findById(id);
 
         if(registered.isEmpty()) {

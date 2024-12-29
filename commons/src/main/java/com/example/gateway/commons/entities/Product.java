@@ -24,6 +24,8 @@ public class Product implements Serializable {
 
     private Double price;
 
+    private String description;
+
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
     private Client client;
