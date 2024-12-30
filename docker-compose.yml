@@ -11,6 +11,8 @@ services:
   config-server:
     image: config-server:v1
     container_name: config-server
+    environment:
+      - "SPRING_PROFILES_ACTIVE=dev"
     ports:
       - "8888:8888"
     networks:
@@ -49,29 +51,35 @@ services:
   msvc-cliente:
     image: msvc-cliente:v1
     container_name: msvc-cliente
+    environment:
+      - "SPRING_PROFILES_ACTIVE=dev"
     networks:
       - springcloud-network
     depends_on:
+      - config-server
       - postgres
       - eureka-server
-      - config-server
 #      - zipkin-server
 
   msvc-user:
     image: msvc-user:v1
     container_name: msvc-user
+    environment:
+      - "SPRING_PROFILES_ACTIVE=dev"
     networks:
       - springcloud-network
     depends_on:
+      - config-server
       - postgres
       - eureka-server
-      - config-server
 #      - zipkin-server
       - msvc-cliente
 
   oauth-server:
     image: oauth-server:v1
     container_name: oauth-server
+    environment:
+      - "SPRING_PROFILES_ACTIVE=dev"
     ports:
       - "9000:9000"
     networks:
@@ -81,6 +89,46 @@ services:
 #      - zipkin-server
       - msvc-user
 
+  msvc-producto:
+    image: msvc-producto:v1
+    container_name: msvc-producto
+    environment:
+      - "SPRING_PROFILES_ACTIVE=dev"
+    networks:
+      - springcloud-network
+    depends_on:
+      - config-server
+      - postgres
+      - eureka-server
+#      - zipkin-server
+
+  msvc-order:
+    image: msvc-order:v1
+    container_name: msvc-order
+    environment:
+      - "SPRING_PROFILES_ACTIVE=dev"
+    networks:
+      - springcloud-network
+    depends_on:
+      - postgres
+      - eureka-server
+      - config-server
+#      - zipkin-server
+
+  msvc-item:
+    image: msvc-item:v1
+    container_name: msvc-item
+    environment:
+      - "SPRING_PROFILES_ACTIVE=dev"
+    networks:
+      - springcloud-network
+    depends_on:
+      - postgres
+      - eureka-server
+      - config-server
+#      - zipkin-server
+      - msvc-order
+
   gateway-server:
     image: gateway-server:v1
     container_name: gateway-server
@@ -89,6 +137,7 @@ services:
     networks:
       - springcloud-network
     environment:
+      SPRING_PROFILES_ACTIVE: dev
       IP_ADDR: http://192.168.100.10:9000
     depends_on:
       - eureka-server
@@ -96,6 +145,9 @@ services:
 #      - zipkin-server
       - msvc-cliente
       - msvc-user
+      - msvc-producto
+      - msvc-item
+      - msvc-order
 
   # Añade aquí otros microservicios, como msvc-product, msvc-item, etc...
 

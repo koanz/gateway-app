@@ -2,7 +2,6 @@ package com.example.gateway.cliente.controllers;
 
 import com.example.gateway.cliente.services.IClientService;
 import com.example.gateway.commons.dtos.requests.ClientRequestDto;
-import com.example.gateway.commons.dtos.requests.UserUpdateDto;
 import com.example.gateway.commons.models.PaginationRequest;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
