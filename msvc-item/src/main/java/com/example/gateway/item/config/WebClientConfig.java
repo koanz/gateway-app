@@ -12,7 +12,7 @@ public class WebClientConfig {
 
     @Bean
     WebClient webClient(WebClient.Builder webClientBuilder,
-                        @Value("${config.baseurl.endpoint.msvc-product}") String url,
+                        @Value("${config.baseurl.endpoint.msvc-order}") String url,
                         ReactorLoadBalancerExchangeFilterFunction lbFunction) {
         return webClientBuilder.baseUrl(url).filter(lbFunction).build();
     }
